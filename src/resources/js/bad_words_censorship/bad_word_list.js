@@ -133,7 +133,7 @@ class BadWordList {
    * @returns {boolean} Returns true if added successfully, false otherwise.
    */
   add(word) {
-    const cleanWord = word.toLowerCase().trim();
+    const cleanWord = word.toLowerCase().replace(/[^\p{L}]/gu, '');
     if (!cleanWord || this.isFull()) {
       return false;
     }
