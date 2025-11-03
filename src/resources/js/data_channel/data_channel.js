@@ -7,8 +7,8 @@
  * https://webrtc.org/getting-started/firebase-rtc-codelab
  * https://webrtc.org/getting-started/data-channels
  */
-'use strict';
-import { initializeApp } from 'firebase/app';
+"use strict";
+import { initializeApp } from "firebase/app";
 import {
   getFirestore,
   collection,
@@ -20,12 +20,12 @@ import {
   deleteDoc,
   onSnapshot,
   serverTimestamp,
-} from 'firebase/firestore';
-import { firebaseConfig } from './firebase_config.js';
-import seedrandom from 'seedrandom';
-import { setCustomRng } from '../offline_version_js/rand.js';
-import { mod, isInModRange } from '../utils/mod.js';
-import { bufferLength, PikaUserInputWithSync } from '../keyboard_online.js';
+} from "firebase/firestore";
+import { firebaseConfig } from "./firebase_config.js";
+import seedrandom from "seedrandom";
+import { setCustomRng } from "../offline_version_js/rand.js";
+import { mod, isInModRange } from "../utils/mod.js";
+import { bufferLength, PikaUserInputWithSync } from "../keyboard_online.js";
 import {
   noticeDisconnected,
   enableChatOpenBtnAndChatDisablingBtn,
@@ -47,30 +47,30 @@ import {
   autoAskChangingToFastSpeedToPeer,
   applyAutoAskChangingToFastSpeedWhenBothPeerDo,
   MAX_NICKNAME_LENGTH,
-} from '../ui_online.js';
+} from "../ui_online.js";
 import {
   displayMyAndPeerNicknameShownOrHidden,
   displayNicknameFor,
   displayPeerNicknameFor,
   displayPartialIPFor,
-} from '../nickname_display.js';
+} from "../nickname_display.js";
 import {
   setChatRngs,
   displayMyChatMessage,
   displayPeerChatMessage,
   displayMyAndPeerChatEnabledOrDisabled,
-} from '../chat_display.js';
-import { rtcConfiguration } from './rtc_configuration.js';
-import { parsePublicIPFromCandidate, getPartialIP } from './parse_candidate.js';
+} from "../chat_display.js";
+import { rtcConfiguration } from "./rtc_configuration.js";
+import { parsePublicIPFromCandidate, getPartialIP } from "./parse_candidate.js";
 import {
   convertUserInputTo5bitNumber,
   convert5bitNumberToUserInput,
-} from '../utils/input_conversion.js';
+} from "../utils/input_conversion.js";
 import {
   sendQuickMatchSuccessMessageToServer,
   sendWithFriendSuccessMessageToServer,
-} from '../quick_match/quick_match.js';
-import { replaySaver } from '../replay/replay_saver.js';
+} from "../quick_match/quick_match.js";
+import { replaySaver } from "../replay/replay_saver.js";
 
 /** @typedef {{speed: string, winningScore: number}} Options */
 
@@ -87,10 +87,10 @@ export const channel = {
   amICreatedRoom: false,
   amIPlayer2: null, // set from pikavolley_online.js
   isQuickMatch: null, // set from ui_online.js
-  myNickname: '', // set from ui_online.js
-  _peerNickname: '',
-  myPartialPublicIP: '*.*.*.*',
-  peerPartialPublicIP: '*.*.*.*',
+  myNickname: "", // set from ui_online.js
+  _peerNickname: "",
+  myPartialPublicIP: "*.*.*.*",
+  peerPartialPublicIP: "*.*.*.*",
   myChatEnabled: true,
   peerChatEnabled: true,
   myIsPeerNicknameVisible: true, // For nicknameHideBtn
@@ -98,7 +98,7 @@ export const channel = {
   willAskFastAutomatically: false,
 
   get peerNickname() {
-    return this.myIsPeerNicknameVisible ? this._peerNickname : '';
+    return this.myIsPeerNicknameVisible ? this._peerNickname : "";
   },
   set peerNickname(nickname) {
     this._peerNickname = nickname;
@@ -131,7 +131,7 @@ const pingTestManager = {
  */
 function createMessageSyncManager(offset) {
   return {
-    pendingMessage: '',
+    pendingMessage: "",
     resendIntervalID: null,
     _syncCounter: offset,
     _peerSyncCounter: offset + ((offset + 1) % 2),
@@ -182,17 +182,17 @@ export async function createRoom(roomIdToCreate) {
   roomId = roomIdToCreate;
 
   const db = getFirestore(firebaseApp);
-  roomRef = doc(db, 'rooms', roomId);
+  roomRef = doc(db, "rooms", roomId);
 
-  console.log('Create PeerConnection with configuration: ', rtcConfiguration);
+  console.log("Create PeerConnection with configuration: ", rtcConfiguration);
   peerConnection = new RTCPeerConnection(rtcConfiguration);
   registerPeerConnectionListeners(peerConnection);
 
   collectIceCandidates(
     roomRef,
     peerConnection,
-    'offerorCandidates',
-    'answererCandidates'
+    "offerorCandidates",
+    "answererCandidates"
   );
 
   // Create an unreliable and unordered data channel, which is UDP-like channel.
@@ -220,22 +220,22 @@ export async function createRoom(roomIdToCreate) {
   // https://www.w3.org/TR/webrtc/#dictionary-rtcdatachannelinit-members
   // https://www.w3.org/TR/webrtc/#bib-rtcweb-data
   // https://tools.ietf.org/html/draft-ietf-rtcweb-data-channel-13#section-6.1
-  dataChannel = peerConnection.createDataChannel('pikavolley_p2p_channel', {
+  dataChannel = peerConnection.createDataChannel("pikavolley_p2p_channel", {
     ordered: false,
     maxRetransmits: 0,
   });
-  console.log('Created data channel', dataChannel);
+  console.log("Created data channel", dataChannel);
 
-  dataChannel.addEventListener('open', dataChannelOpened);
-  dataChannel.addEventListener('message', recieveFromPeer);
-  dataChannel.addEventListener('close', dataChannelClosed);
+  dataChannel.addEventListener("open", dataChannelOpened);
+  dataChannel.addEventListener("message", recieveFromPeer);
+  dataChannel.addEventListener("close", dataChannelClosed);
 
   roomSnapshotUnsubscribe = onSnapshot(roomRef, async (snapshot) => {
-    console.log('Got updated room:', snapshot.data());
+    console.log("Got updated room:", snapshot.data());
     const data = snapshot.data();
     if (!peerConnection.currentRemoteDescription && data.answer) {
-      printLog('Answer received');
-      console.log('Set remote description');
+      printLog("Answer received");
+      console.log("Set remote description");
       const answer = data.answer;
       await peerConnection.setRemoteDescription(answer);
       roomSnapshotUnsubscribe();
@@ -245,7 +245,7 @@ export async function createRoom(roomIdToCreate) {
 
   const offer = await peerConnection.createOffer();
   await peerConnection.setLocalDescription(offer);
-  console.log('Created offer and set local description:', offer);
+  console.log("Created offer and set local description:", offer);
   const roomWithOffer = {
     timestamp: serverTimestamp(),
     offer: {
@@ -255,7 +255,7 @@ export async function createRoom(roomIdToCreate) {
   };
   await setDoc(roomRef, roomWithOffer);
   console.log(`New room created with SDP offer. Room ID: ${roomRef.id}`);
-  printLog('Offer sent');
+  printLog("Offer sent");
 }
 
 /**
@@ -268,15 +268,15 @@ export async function joinRoom(roomIdToJoin) {
     printNotValidRoomIdMessage();
     return false;
   }
-  console.log('Join room: ', roomId);
+  console.log("Join room: ", roomId);
 
   const db = getFirestore(firebaseApp);
-  const roomRef = doc(db, 'rooms', `${roomId}`);
+  const roomRef = doc(db, "rooms", `${roomId}`);
   const roomSnapshot = await getDocFromServer(roomRef);
   const doesRoomExist = roomSnapshot.exists();
-  console.log('Got room:', doesRoomExist);
+  console.log("Got room:", doesRoomExist);
   if (!doesRoomExist) {
-    console.log('No room is mathing the ID');
+    console.log("No room is mathing the ID");
     if (channel.isQuickMatch) {
       printNoRoomMatchingMessageInQuickMatch();
       printConnectionFailed();
@@ -287,12 +287,12 @@ export async function joinRoom(roomIdToJoin) {
   }
   const data = roomSnapshot.data();
   if (data.answer) {
-    console.log('The room is already joined by someone else');
+    console.log("The room is already joined by someone else");
     printSomeoneElseAlreadyJoinedRoomMessage();
     return false;
   }
 
-  console.log('Create PeerConnection with configuration: ', rtcConfiguration);
+  console.log("Create PeerConnection with configuration: ", rtcConfiguration);
   peerConnection = new RTCPeerConnection(rtcConfiguration);
   registerPeerConnectionListeners(peerConnection);
 
@@ -300,18 +300,18 @@ export async function joinRoom(roomIdToJoin) {
   collectIceCandidates(
     roomRef,
     peerConnection,
-    'answererCandidates',
-    'offerorCandidates'
+    "answererCandidates",
+    "offerorCandidates"
   );
 
   // Code for creating SDP answer below
   const offer = data.offer;
   await peerConnection.setRemoteDescription(offer);
-  console.log('Set remote description');
-  printLog('Offer received');
+  console.log("Set remote description");
+  printLog("Offer received");
   const answer = await peerConnection.createAnswer();
   await peerConnection.setLocalDescription(answer);
-  console.log('set local description:', answer);
+  console.log("set local description:", answer);
 
   const roomWithAnswer = {
     answer: {
@@ -320,8 +320,8 @@ export async function joinRoom(roomIdToJoin) {
     },
   };
   await updateDoc(roomRef, roomWithAnswer);
-  printLog('Answer sent');
-  console.log('joined room!');
+  printLog("Answer sent");
+  console.log("joined room!");
 
   return true;
 }
@@ -343,14 +343,14 @@ export function cleanUpFirestoreRelevants() {
   // Delete ice candidates documents
   while (localICECandDocRefs.length > 0) {
     deleteDoc(localICECandDocRefs.pop()).then(() => {
-      console.log('deleted an ICE candidate doc');
+      console.log("deleted an ICE candidate doc");
     });
   }
 
   // Delete the room document
   if (channel.amICreatedRoom && roomRef) {
     deleteDoc(roomRef).then(() => {
-      console.log('deleted the room');
+      console.log("deleted the room");
     });
     roomRef = null;
   }
@@ -363,7 +363,7 @@ export function closeConnection() {
   if (peerConnection) {
     peerConnection.close();
   }
-  console.log('Did close data channel and peer connection');
+  console.log("Did close data channel and peer connection");
 }
 
 /**
@@ -471,7 +471,7 @@ function receiveChatMessageFromPeer(chatMessage) {
   if (peerSyncCounter === chatManager.peerSyncCounter) {
     // if peer resend prevMessage since peer did not recieve
     // the message ACK(acknowledgment) array buffer with length 1
-    console.log('arraybuffer with length 1 for chat message ACK resent');
+    console.log("arraybuffer with length 1 for chat message ACK resent");
   } else if (peerSyncCounter === chatManager.nextPeerSyncCounter) {
     // if peer send new message
     chatManager.peerSyncCounter++;
@@ -481,7 +481,7 @@ function receiveChatMessageFromPeer(chatMessage) {
         .slice(0, -1)
         .trim()
         .slice(0, MAX_NICKNAME_LENGTH);
-      displayPeerNicknameFor(channel.peerNickname, channel.amICreatedRoom); 
+      displayPeerNicknameFor(channel.peerNickname, channel.amICreatedRoom);
       // Replaced function for filtering peer's nickname
       displayNicknameFor(channel.myNickname, !channel.amICreatedRoom);
       displayPartialIPFor(channel.peerPartialPublicIP, channel.amICreatedRoom);
@@ -503,7 +503,7 @@ function receiveChatMessageFromPeer(chatMessage) {
       displayPeerChatMessage(chatMessage.slice(0, -1));
     }
   } else {
-    console.log('invalid chat message received.');
+    console.log("invalid chat message received.");
     return;
   }
 
@@ -560,7 +560,7 @@ function receiveOptionsChangeMessageFromPeer(optionsChangeMessage) {
     // if peer resend prevMessage since peer did not recieve
     // the message ACK(acknowledgment) array buffer with length 1
     console.log(
-      'arraybuffer with length 1 for options change message ACK resent'
+      "arraybuffer with length 1 for options change message ACK resent"
     );
   } else if (peerSyncCounter === optionsChangeManager.nextPeerSyncCounter) {
     // if peer send new message
@@ -568,7 +568,7 @@ function receiveOptionsChangeMessageFromPeer(optionsChangeMessage) {
     const options = JSON.parse(optionsChangeMessage.slice(0, -1));
     if (
       options.auto &&
-      options.speed === 'fast' &&
+      options.speed === "fast" &&
       channel.willAskFastAutomatically
     ) {
       applyAutoAskChangingToFastSpeedWhenBothPeerDo();
@@ -577,7 +577,7 @@ function receiveOptionsChangeMessageFromPeer(optionsChangeMessage) {
     }
     askOptionsChangeReceivedFromPeer(options);
   } else {
-    console.log('invalid options change message received.');
+    console.log("invalid options change message received.");
     return;
   }
 
@@ -627,17 +627,17 @@ function receiveOptionsChangeAgreeMessageFromPeer(optionsChangeAgreeMessage) {
     // if peer resend prevMessage since peer did not recieve
     // the message ACK(acknowledgment) array buffer with length 1
     console.log(
-      'arraybuffer with length 1 for options change message ACK resent'
+      "arraybuffer with length 1 for options change message ACK resent"
     );
   } else if (
     peerSyncCounter === optionsChangeAgreeManager.nextPeerSyncCounter
   ) {
     // if peer send new message
     optionsChangeAgreeManager.peerSyncCounter++;
-    const agree = optionsChangeAgreeMessage.slice(0, -1) === 'true';
+    const agree = optionsChangeAgreeMessage.slice(0, -1) === "true";
     noticeAgreeMessageFromPeer(agree);
   } else {
-    console.log('invalid options change message received.');
+    console.log("invalid options change message received.");
     return;
   }
 
@@ -687,16 +687,16 @@ function receiveChatEnabledMessageFromPeer(chatEnabledMessage) {
     // if peer resend prevMessage since peer did not recieve
     // the message ACK(acknowledgment) array buffer with length 1
     console.log(
-      'arraybuffer with length 1 for chat enabled/disabled message ACK resent'
+      "arraybuffer with length 1 for chat enabled/disabled message ACK resent"
     );
   } else if (peerSyncCounter === chatEnabledManager.nextPeerSyncCounter) {
     // if peer send new message
     chatEnabledManager.peerSyncCounter++;
-    const chatEnabled = chatEnabledMessage.slice(0, -1) === 'true';
+    const chatEnabled = chatEnabledMessage.slice(0, -1) === "true";
     channel.peerChatEnabled = chatEnabled;
     displayMyAndPeerChatEnabledOrDisabled();
   } else {
-    console.log('invalid chat enabled/disabled message received.');
+    console.log("invalid chat enabled/disabled message received.");
     return;
   }
 
@@ -746,16 +746,16 @@ function receivePeerNicknameShownMessageFromPeer(peerNicknameShownMessage) {
     // if peer resend prevMessage since peer did not recieve
     // the message ACK(acknowledgment) array buffer with length 1
     console.log(
-      'arraybuffer with length 1 for peer nickname shown/hidden message ACK resent'
+      "arraybuffer with length 1 for peer nickname shown/hidden message ACK resent"
     );
   } else if (peerSyncCounter === peerNicknameShownManager.nextPeerSyncCounter) {
     // if peer send new message
     peerNicknameShownManager.peerSyncCounter++;
-    const PeerNicknameShown = peerNicknameShownMessage.slice(0, -1) === 'true';
+    const PeerNicknameShown = peerNicknameShownMessage.slice(0, -1) === "true";
     channel.peerIsPeerNicknameVisible = PeerNicknameShown;
     displayMyAndPeerNicknameShownOrHidden();
   } else {
-    console.log('invalid peer nickname shown/hidden message received.');
+    console.log("invalid peer nickname shown/hidden message received.");
     return;
   }
 
@@ -776,7 +776,7 @@ function startGameAfterPingTest() {
     autoAskChangingToFastSpeedToPeer(!isAutoAskingFastWhenBothPeerDoApplied);
   }
 
-  printLog('start ping test');
+  printLog("start ping test");
   const buffer = new ArrayBuffer(1);
   const view = new DataView(buffer);
   view.setInt8(0, -1);
@@ -828,7 +828,7 @@ function respondToPingTest(data) {
     const buffer = new ArrayBuffer(1);
     const view = new DataView(buffer);
     view.setInt8(0, -2);
-    console.log('respond to ping');
+    console.log("respond to ping");
     dataChannel.send(buffer);
   } else if (dataView.getInt8(0) === -2) {
     pingTestManager.pingMesurementArray.push(
@@ -872,7 +872,7 @@ function recieveFromPeer(event) {
         respondToPingTest(data);
       }
     }
-  } else if (typeof data === 'string') {
+  } else if (typeof data === "string") {
     const syncCounter = Number(data.slice(-1));
     if (syncCounter >= 8) {
       receivePeerNicknameShownMessageFromPeer(data);
@@ -892,11 +892,11 @@ function recieveFromPeer(event) {
  * Data channel open event listener
  */
 function dataChannelOpened() {
-  printLog('data channel opened!');
-  console.log('data channel opened!');
+  printLog("data channel opened!");
+  console.log("data channel opened!");
   console.log(`dataChannel.ordered: ${dataChannel.ordered}`);
   console.log(`dataChannel.maxRetransmits: ${dataChannel.maxRetransmits}`);
-  dataChannel.binaryType = 'arraybuffer';
+  dataChannel.binaryType = "arraybuffer";
   channel.isOpen = true;
   isDataChannelEverOpened = true;
 
@@ -934,13 +934,13 @@ function dataChannelOpened() {
  * Data channel close event listener
  */
 function dataChannelClosed() {
-  console.log('data channel closed');
+  console.log("data channel closed");
   channel.isOpen = false;
   noticeDisconnected();
 }
 
 function registerPeerConnectionListeners(peerConnection) {
-  peerConnection.addEventListener('icegatheringstatechange', () => {
+  peerConnection.addEventListener("icegatheringstatechange", () => {
     console.log(
       `ICE gathering state changed: ${peerConnection.iceGatheringState}`
     );
@@ -949,18 +949,18 @@ function registerPeerConnectionListeners(peerConnection) {
     );
   });
 
-  peerConnection.addEventListener('connectionstatechange', () => {
+  peerConnection.addEventListener("connectionstatechange", () => {
     console.log(`Connection state change: ${peerConnection.connectionState}`);
     printLog(`Connection state change: ${peerConnection.connectionState}`);
     if (
-      peerConnection.connectionState === 'disconnected' ||
-      peerConnection.connectionState === 'closed'
+      peerConnection.connectionState === "disconnected" ||
+      peerConnection.connectionState === "closed"
     ) {
       channel.isOpen = false;
       noticeDisconnected();
     }
     if (
-      peerConnection.connectionState === 'failed' &&
+      peerConnection.connectionState === "failed" &&
       isDataChannelEverOpened === false
     ) {
       notifyBySound();
@@ -968,12 +968,12 @@ function registerPeerConnectionListeners(peerConnection) {
     }
   });
 
-  peerConnection.addEventListener('signalingstatechange', () => {
+  peerConnection.addEventListener("signalingstatechange", () => {
     console.log(`Signaling state change: ${peerConnection.signalingState}`);
     printLog(`Signaling state change: ${peerConnection.signalingState}`);
   });
 
-  peerConnection.addEventListener('iceconnectionstatechange ', () => {
+  peerConnection.addEventListener("iceconnectionstatechange ", () => {
     console.log(
       `ICE connection state change: ${peerConnection.iceConnectionState}`
     );
@@ -982,23 +982,23 @@ function registerPeerConnectionListeners(peerConnection) {
     );
   });
 
-  peerConnection.addEventListener('datachannel', (event) => {
+  peerConnection.addEventListener("datachannel", (event) => {
     dataChannel = event.channel;
 
-    console.log('data channel received!', dataChannel);
-    printLog('data channel received!');
-    dataChannel.addEventListener('open', dataChannelOpened);
-    dataChannel.addEventListener('message', recieveFromPeer);
-    dataChannel.addEventListener('close', dataChannelClosed);
+    console.log("data channel received!", dataChannel);
+    printLog("data channel received!");
+    dataChannel.addEventListener("open", dataChannelOpened);
+    dataChannel.addEventListener("message", recieveFromPeer);
+    dataChannel.addEventListener("close", dataChannelClosed);
   });
 }
 
 function collectIceCandidates(roomRef, peerConnection, localName, remoteName) {
   const candidatesCollection = collection(roomRef, localName);
 
-  peerConnection.addEventListener('icecandidate', (event) => {
+  peerConnection.addEventListener("icecandidate", (event) => {
     if (!event.candidate) {
-      console.log('Got final candidate!');
+      console.log("Got final candidate!");
       return;
     }
     const json = event.candidate.toJSON();
@@ -1006,28 +1006,28 @@ function collectIceCandidates(roomRef, peerConnection, localName, remoteName) {
       localICECandDocRefs.push(ref)
     );
 
-    console.log('Got candidate: ', event.candidate);
+    console.log("Got candidate: ", event.candidate);
 
-    if (event.candidate.candidate === '') {
+    if (event.candidate.candidate === "") {
       // This if statement is for Firefox browser.
       return;
     }
     const myPublicIP = parsePublicIPFromCandidate(event.candidate.candidate);
     if (myPublicIP !== null) {
       channel.myPartialPublicIP = getPartialIP(myPublicIP);
-      console.log('part of my public IP address:', channel.myPartialPublicIP);
+      console.log("part of my public IP address:", channel.myPartialPublicIP);
     }
   });
   iceCandOnSnapshotUnsubscribe = onSnapshot(
     collection(roomRef, remoteName),
     (snapshot) => {
       snapshot.docChanges().forEach(async (change) => {
-        if (change.type === 'added') {
+        if (change.type === "added") {
           const data = change.doc.data();
           await peerConnection.addIceCandidate(data);
-          console.log('Got new remote ICE candidate');
+          console.log("Got new remote ICE candidate");
 
-          if (data.candidate === '') {
+          if (data.candidate === "") {
             // This if statement is for Firefox browser.
             return;
           }

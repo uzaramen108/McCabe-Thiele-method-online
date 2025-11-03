@@ -1,8 +1,8 @@
-import { saveAs } from 'file-saver';
-import { serialize } from '../utils/serialize.js';
-import { getHashCode } from '../utils/hash_code.js';
-import { convertUserInputTo5bitNumber } from '../utils/input_conversion.js';
-import { getCommentText } from './ui_replay.js';
+import { saveAs } from "file-saver";
+import { serialize } from "../utils/serialize.js";
+import { getHashCode } from "../utils/hash_code.js";
+import { convertUserInputTo5bitNumber } from "../utils/input_conversion.js";
+import { getCommentText } from "./ui_replay.js";
 
 /** @typedef {import('../offline_version_js/physics.js').PikaUserInput} PikaUserInput */
 /** @typedef {{speed: string, winningScore: number}} Options options communicated with the peer */
@@ -14,8 +14,8 @@ class ReplaySaver {
   constructor() {
     this.frameCounter = 0;
     this.roomID = null; // used for set RNGs
-    this.nicknames = ['', '']; // [0]: room creator's nickname, [1]: room joiner's nickname
-    this.partialPublicIPs = ['*.*.*.*', '*.*.*.*']; // [0]: room creator's partial public IP address, [1]: room joiner's partial public IP address
+    this.nicknames = ["", ""]; // [0]: room creator's nickname, [1]: room joiner's nickname
+    this.partialPublicIPs = ["*.*.*.*", "*.*.*.*"]; // [0]: room creator's partial public IP address, [1]: room joiner's partial public IP address
     this.inputs = []; // number[], the number in the array represents player1, player2 input
     this.options = []; // [frameCounter, options][];
     this.chats = []; // [frameCounter, playerIndex (1 or 2), chatMessage][]
@@ -87,7 +87,7 @@ class ReplaySaver {
    */
   saveAsFile() {
     const pack = {
-      version: 'p2p-online',
+      version: "p2p-online",
       roomID: this.roomID,
       nicknames: this.nicknames,
       partialPublicIPs: this.partialPublicIPs,
@@ -109,22 +109,22 @@ class ReplaySaver {
     };
 
     const blob = new Blob([JSON.stringify(packWithComment)], {
-      type: 'text/plain;charset=utf-8',
+      type: "text/plain;charset=utf-8",
     });
     const d = new Date();
     // The code removing illegal characters in Windows by replace method is from:
     // https://stackoverflow.com/a/42210346/8581025
-    const filename = `${d.getFullYear()}${('0' + (d.getMonth() + 1)).slice(
+    const filename = `${d.getFullYear()}${("0" + (d.getMonth() + 1)).slice(
       -2
-    )}${('0' + d.getDate()).slice(-2)}_${('0' + d.getHours()).slice(-2)}${(
-      '0' + d.getMinutes()
+    )}${("0" + d.getDate()).slice(-2)}_${("0" + d.getHours()).slice(-2)}${(
+      "0" + d.getMinutes()
     ).slice(-2)}_${this.nicknames[0]}_${this.partialPublicIPs[0].replace(
-      '.*.*',
-      ''
+      ".*.*",
+      ""
     )}_vs_${this.nicknames[1]}_${this.partialPublicIPs[1].replace(
-      '.*.*',
-      ''
-    )}.txt`.replace(/[/\\?%*:|"<>]/g, '_');
+      ".*.*",
+      ""
+    )}.txt`.replace(/[/\\?%*:|"<>]/g, "_");
     saveAs(blob, filename, { autoBom: true });
   }
 }

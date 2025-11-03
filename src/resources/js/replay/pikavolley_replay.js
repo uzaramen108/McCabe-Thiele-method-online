@@ -1,20 +1,20 @@
-import seedrandom from 'seedrandom';
-import { PikachuVolleyball } from '../offline_version_js/pikavolley.js';
-import { setCustomRng } from '../offline_version_js/rand.js';
-import { setChatRngs, displayChatMessageAt } from '../chat_display.js';
+import seedrandom from "seedrandom";
+import { PikachuVolleyball } from "../offline_version_js/pikavolley.js";
+import { setCustomRng } from "../offline_version_js/rand.js";
+import { setChatRngs, displayChatMessageAt } from "../chat_display.js";
 import {
   displayNicknameFor,
   displayPartialIPFor,
-} from '../nickname_display.js';
-import { Cloud, Wave } from '../offline_version_js/cloud_and_wave.js';
-import { PikaPhysics } from '../offline_version_js/physics.js';
-import { convert5bitNumberToUserInput } from '../utils/input_conversion.js';
+} from "../nickname_display.js";
+import { Cloud, Wave } from "../offline_version_js/cloud_and_wave.js";
+import { PikaPhysics } from "../offline_version_js/physics.js";
+import { convert5bitNumberToUserInput } from "../utils/input_conversion.js";
 import {
   noticeEndOfReplay,
   moveScrubberTo,
   showKeyboardInputs,
-} from './ui_replay.js';
-import { setTickerMaxFPSAccordingToNormalFPS } from './replay_player.js';
+} from "./ui_replay.js";
+import { setTickerMaxFPSAccordingToNormalFPS } from "./replay_player.js";
 
 /** @typedef GameState @type {function():void} */
 
@@ -244,13 +244,13 @@ export class PikachuVolleyballReplay extends PikachuVolleyball {
     while (options && options[0] === this.replayFrameCounter) {
       if (options[1].speed) {
         switch (options[1].speed) {
-          case 'slow':
+          case "slow":
             this.normalFPS = 20;
             break;
-          case 'medium':
+          case "medium":
             this.normalFPS = 25;
             break;
-          case 'fast':
+          case "fast":
             this.normalFPS = 30;
             break;
         }
