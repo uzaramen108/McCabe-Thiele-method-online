@@ -156,7 +156,7 @@ class BadWordList {
   }
 
   /**
-   * Create a read-only 2D array [word, addedTime, remark].
+   * Create a read-only 2D array [word, addedTime].
    * @returns {[string, number][]}
    */
   createArrayView() {
