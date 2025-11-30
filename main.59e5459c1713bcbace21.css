@@ -307,4 +307,127 @@ canvas {
     margin-top: 10px;
 }
 
-/*# sourceMappingURL=main.c985bc91e34d8d1c0d8d.css.map*/
+/* 모달 컨텐츠 기본 크기보다 더 넓게 설정 */
+.modal-content.modal-lg {
+    max-width: 900px; /* 기존 600px에서 900px로 확장 */
+    width: 95%;
+    padding: 30px 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-title {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    color: #333;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+}
+
+.modal-desc {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 0.95rem;
+}
+
+/* 좌우 분할 컨테이너 */
+.modal-split-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 1:1 비율로 분할 */
+    gap: 40px; /* 패널 사이 간격 */
+    margin-bottom: 30px;
+    align-items: start;
+}
+
+/* 패널 공통 스타일 */
+.split-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* 왼쪽 패널 (선택/추가) */
+.split-panel.left-panel {
+    border-right: 1px solid #ddd; /* 세로 분리선 */
+    padding-right: 40px; /* 분리선과의 간격 */
+}
+
+.split-panel h3 {
+    font-size: 1.1rem;
+    color: #444;
+    margin-top: 0;
+    margin-bottom: 5px;
+    border-bottom: none; /* 기존 h3 border 제거 */
+    padding-bottom: 0;
+}
+
+/* 드롭다운 스타일 강화 */
+.split-panel select {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+/* 버튼 그룹 */
+.action-group {
+    margin-top: 10px;
+}
+
+/* --- 버튼 색상 테마 --- */
+.btn-primary {
+    background-color: #007bff; /* 파란색 */
+    color: white;
+    width: 100%;
+    padding: 12px;
+    transition: background-color 0.2s;
+}
+.btn-primary:hover { background-color: #0056b3; }
+
+.btn-danger {
+    background-color: #dc3545; /* 빨간색 */
+    color: white;
+    width: 100%;
+    padding: 12px;
+    transition: background-color 0.2s;
+}
+.btn-danger:hover { background-color: #a71d2a; }
+
+.btn-secondary {
+    background-color: #6c757d; /* 회색 */
+    color: white;
+    padding: 12px;
+    transition: background-color 0.2s;
+}
+.btn-secondary:hover { background-color: #545b62; }
+
+/* 하단 푸터 */
+.modal-footer {
+    margin-top: auto; /* 내용이 적어도 항상 바닥에 붙음 */
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.full-width {
+    width: 100%;
+    font-size: 1.1rem;
+}
+
+/* 반응형: 화면이 좁아지면(모바일 등) 세로로 배치 */
+@media (max-width: 768px) {
+    .modal-split-container {
+        grid-template-columns: 1fr; /* 1열로 변경 */
+        gap: 30px;
+    }
+    
+    .split-panel.left-panel {
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+        padding-right: 0;
+        padding-bottom: 30px;
+    }
+}
+
+/*# sourceMappingURL=main.59e5459c1713bcbace21.css.map*/
