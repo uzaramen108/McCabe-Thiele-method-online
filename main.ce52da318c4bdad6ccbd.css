@@ -430,4 +430,26 @@ canvas {
     }
 }
 
-/*# sourceMappingURL=main.59e5459c1713bcbace21.css.map*/
+/* 폼 내부의 제출(Submit) 버튼을 특정하여 스타일 적용 */
+#calc-form button[type="submit"] {
+    grid-column: 1 / -1; /* 그리드의 처음부터 끝까지 가로로 꽉 채움 */
+    width: 100%;         /* 너비 100% */
+    padding: 15px;       /* 높이감을 줘서 클릭하기 편하게 */
+    font-size: 1.1rem;   /* 글자 크기를 살짝 키움 */
+    margin-top: 20px;    /* 위쪽 입력창들과 간격을 둠 */
+    background-color: #4361ee; /* (선택사항) 눈에 잘 띄는 진한 파란색 */
+    border-radius: 6px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* 살짝 그림자 추가 */
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+#calc-form button[type="submit"]:hover {
+    background-color: #304ffe;
+    transform: translateY(-1px); /* 마우스 올리면 살짝 떠오르는 효과 */
+}
+
+#calc-form button[type="submit"]:active {
+    transform: translateY(0); /* 클릭 시 눌리는 효과 */
+}
+
+/*# sourceMappingURL=main.ce52da318c4bdad6ccbd.css.map*/
