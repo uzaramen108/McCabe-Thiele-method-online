@@ -1,10 +1,4 @@
 dist/
 node_modules/
-firebase_config.js
-quick_match_server_url.js
-analytics.html
-.firebaserc
-firebase.json
-.firebase/
-yarn.lock
-
+supadata_config.js
+test.py
