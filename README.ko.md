@@ -1,23 +1,32 @@
-# 피카츄 배구 P2P 온라인
+# McCabe-Thiele Method Online
 
-[_English_](README.md) | _&check;_ _Korean(한국어)_
 
-피카츄 배구(対戦ぴかちゅ～　ﾋﾞｰﾁﾊﾞﾚｰ編)는 "(C) SACHI SOFT / SAWAYAKAN Programmers"와 "(C) Satoshi Takenouchi"가 1997년에 만든 윈도우용 게임입니다.
 
-피카츄 배구 P2P 온라인은 이 피카츄 배구 게임의 P2P (peer-to-peer) 온라인 버전입니다. 인터넷을 통해 다른 사람과 함께 플레이할 수 있습니다. 원조 게임을 리버스 엔지니어링해서 만든 [피카츄 배구 오프라인 웹 버전](https://github.com/gorisanson/pikachu-volleyball)에 [WebRTC](https://webrtc.org/) [data channels](https://webrtc.org/getting-started/data-channels)을 결합하여 개발했습니다.
+_&check;_ _Korean(한국어)_ | [_English_](README.md)
 
-https://gorisanson.github.io/pikachu-volleyball-p2p-online/ko/ 에서 피카츄 배구 P2P 온라인을 플레이할 수 있습니다.
 
-<img src="src/resources/assets/images/screenshot.png" alt="피카츄 배구 게임 스크린샷" width="648">
 
-## 구조
+**McCabe-Thiele Method Online**은 화학공학 전공 학생과 전문가가 이원 증류 공정을 시각화하는 데 도움이 되도록 설계된 웹 기반 시뮬레이션 도구입니다. McCabe-Thiele 다이어그램의 그래픽 구성을 자동화하여 이론적인 단 수, 최소 환류비, 그리고 최적의 공급 위치를 결정합니다.
 
-- 오프라인 버전: 오프라인 웹 버전의 소스 코드 파일이 모두 [`src/resources/js/offline_version_js/`](src/resources/js/offline_version_js)에 담겨 있습니다. https://github.com/gorisanson/pikachu-volleyball/tree/main/src/resources/js 에 있는 소스 코드 파일과 동일한 것입니다. 이를 기반으로 온라인 버전을 만들었습니다.
+여기에서 계산기를 사용해 보세요: https://uzaramen108.github.io/McCabe-Thiele-method-online/
 
-- WebRTC data channels: WebRTC data channels를 이용한 P2P 온라인 핵심 기능들이 [`src/resources/js/data_channel/data_channel.js`](src/resources/js/data_channel/data_channel.js)에 담겨 있습니다. (WebRTC로 P2P 연결을 맺기 위한 매개 수단으로 [Firebase Cloud Firestore](https://firebase.google.com/docs/firestore)를 사용합니다. 방장이 방장의 친구에게 보내는 방 ID가 서로 공유하는 Cloud Firestore document의 ID입니다. [Firebase + WebRTC Codelab](https://webrtc.org/getting-started/firebase-rtc-codelab) 및 [https://github.com/webrtc/FirebaseRTC](https://github.com/webrtc/FirebaseRTC)에서 사용한 방식을 거의 그대로 이용한 것입니다.)
+<img width="1423" height="1261" alt="image" src="https://github.com/user-attachments/assets/01f62700-90f2-4675-bb45-4baf559622f7" />
 
-- 퀵 매치: 퀵 매치 서버와 통신하는 기능이 [`src/resources/js/quick_match/quick_match.js`](src/resources/js/quick_match/quick_match.js)에 담겨 있습니다. (퀵 매치 서버로는 [Google App Engine](https://cloud.google.com/appengine)을 사용합니다. 퀵 매치 서버는 퀵 매치를 위해 현재 대기하고 있는 사람의 방 ID를 새로 들어온 사람에게 보내주는 역할을 합니다.)
+## 사용된 기술
 
-게임에서 사용되는 RNG (random number generator) 부분만을 제외하면 게임 상태는 오로지 사용자의 (키보드) 입력에 의해 결정됩니다. 따라서 네트워크 양편에 있는 두 사용자가 사용하는 RNG가 같다면, 사용자의 입력을 서로 주고 받는 것만으로도 두 사용자의 게임 상태를 동일하게 유지할 수 있습니다. 이 P2P 온라인 버전은 data channel open event가 발생할 때 이 두 사용자의 RNG를 같게 만들고 그 후 사용자의 입력을 네트워크를 통해 서로 주고 받습니다.
+이 프로젝트는 복잡한 서버 측 인프라 없이도 인터랙티브 엔지니어링 도구를 제공하기 위해 최신 웹 스택을 활용합니다.
 
-더 자세한 사항은 [`src/resources/js/main_online.js`](src/resources/js/main_online.js) 파일에 있는 주석에서 볼 수 있습니다.
+- **[Chart.js](https://www.chartjs.org/):**
+- HTML5 Canvas에서 McCabe-Thiele 다이어그램을 렌더링하는 핵심 시각화 엔진으로 사용됩니다.
+- 평형 곡선, 작동선(정류/제거), q-선 및 단계별 구성의 정확한 플롯을 처리합니다.
+
+- **[Supabase](https://supabase.com/) (PostgreSQL):**
+- 증기-액체 평형(VLE) 시스템 데이터를 저장하는 백엔드 데이터베이스 역할을 합니다.
+- 애플리케이션이 모든 사용자가 접근하고 기여할 수 있는 화학 시스템의 공유되고 영구적인 라이브러리를 유지할 수 있도록 합니다.
+
+- **LocalStorage(웹 API):**
+- 가벼운 소유권 관리 시스템을 구현합니다.
+- 애플리케이션은 전체 인증 시스템 대신 사용자가 생성한 데이터의 고유 ID를 브라우저의 LocalStorage에 저장합니다. 이를 통해 생성자는 플랫폼을 개방적이고 접근 가능하게 유지하면서 자신의 데이터에 대한 "삭제 권한"을 부여할 수 있습니다.
+
+- **Webpack:**
+- 최적화된 프로덕션 배포를 위해 JavaScript 모듈과 에셋을 번들로 제공합니다.
