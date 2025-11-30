@@ -452,4 +452,24 @@ canvas {
     transform: translateY(0); /* 클릭 시 눌리는 효과 */
 }
 
-/*# sourceMappingURL=main.ce52da318c4bdad6ccbd.css.map*/
+.languages {
+  white-space: nowrap;      /* 1. 강제로 줄바꿈 금지 (한 줄 유지) */
+  grid-column: 1 / -1;      /* 2. (만약 Grid 안에 있다면) 가로 전체 너비 사용 */
+  width: 100%;              /* 너비 100% */
+  margin-bottom: 15px;      /* 아래 요소와 간격 */
+  font-size: 0.9rem;        /* 글자 크기 살짝 작게 */
+  color: #666;              /* 글자 색상 회색조 */
+  text-align: right;        /* (선택사항) 오른쪽 정렬이 보기 좋을 수 있음 */
+}
+
+.languages a {
+  text-decoration: none;    /* 링크 밑줄 제거 */
+  color: #007bff;           /* 링크 색상 (파란색) */
+  font-weight: bold;
+}
+
+.languages a:hover {
+  text-decoration: underline; /* 마우스 올리면 밑줄 */
+}
+
+/*# sourceMappingURL=main.8401423c82da52ed4c36.css.map*/
