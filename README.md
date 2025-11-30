@@ -6,7 +6,7 @@ _&check;_ _English_ | [_Korean(한국어)_](README.ko.md)
 
 
 
-**McCabe-Thiele Method Online** is a web-based simulation tool designed to help chemical engineering students and professionals visualize binary distillation processes. It automates the graphical construction of the McCabe-Thiele diagram to determine the number of theoretical stages, minimum reflux ratio, and optimal feed location.
+**McCabe-Thiele Method Online** is created by undergraduate chemical engineering students, is a web-based simulation tool designed to help chemical engineering students and professionals visualize binary distillation processes. It automates the graphical construction of McCabe-Thiele diagrams to determine the theoretical number of plates, minimum reflux ratio, and optimal feed location. Future updates will provide tools for other chemical processes.
 
 
 

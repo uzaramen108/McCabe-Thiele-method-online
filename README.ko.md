@@ -6,9 +6,9 @@ _&check;_ _Korean(한국어)_ | [_English_](README.md)
 
 
 
-**McCabe-Thiele Method Online**은 화학공학 전공 학생과 전문가가 이원 증류 공정을 시각화하는 데 도움이 되도록 설계된 웹 기반 시뮬레이션 도구입니다. McCabe-Thiele 다이어그램의 그래픽 구성을 자동화하여 이론적인 단 수, 최소 환류비, 그리고 최적의 공급 위치를 결정합니다.
+**McCabe-Thiele Method Online**은 화학공학을 전공하고 있는 학부생이 만든 웹사이트로, 화학공학 전공 학생과 전문가가 이성분계 증류 공정을 시각화하는 데 도움이 되도록 설계된 웹 기반 시뮬레이션 도구입니다. McCabe-Thiele 다이어그램의 그래픽 구성을 자동화하여 이론적인 단 수, 최소 환류비, 그리고 최적의 공급 위치를 결정합니다. 추후 업데이트를 통하여 다른 화학공정에 대한 도구를 제공할 예정입니다.
 
-여기에서 계산기를 사용해 보세요: https://uzaramen108.github.io/McCabe-Thiele-method-online/
+다음 링크를 통해 사이트를 이용하실 수 있습니다: https://uzaramen108.github.io/McCabe-Thiele-method-online/
 
 <img width="1423" height="1261" alt="image" src="https://github.com/user-attachments/assets/01f62700-90f2-4675-bb45-4baf559622f7" />
 
@@ -25,7 +25,7 @@ _&check;_ _Korean(한국어)_ | [_English_](README.md)
 - 애플리케이션이 모든 사용자가 접근하고 기여할 수 있는 화학 시스템의 공유되고 영구적인 라이브러리를 유지할 수 있도록 합니다.
 
 - **LocalStorage(웹 API):**
-- 가벼운 소유권 관리 시스템을 구현합니다.
+- 데이터 삭제 소유권 관리 시스템을 구현합니다.
 - 애플리케이션은 전체 인증 시스템 대신 사용자가 생성한 데이터의 고유 ID를 브라우저의 LocalStorage에 저장합니다. 이를 통해 생성자는 플랫폼을 개방적이고 접근 가능하게 유지하면서 자신의 데이터에 대한 "삭제 권한"을 부여할 수 있습니다.
 
 - **Webpack:**
