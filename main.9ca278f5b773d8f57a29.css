@@ -118,10 +118,18 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
 
 /* 데이터 관리 버튼 (별도 스타일) */
 #manage-vle-data-btn {
-    margin-top: 8px;
+    width: auto;  /* 전체 너비 해제 (글자 크기에 맞춤) */
+    height: 30px; /* 입력창 높이와 동일하게 */
+    margin: 0;    /* 여백 제거 */
+    padding: 0 12px; /* 좌우 패딩 */
+    white-space: nowrap; /* 줄바꿈 방지 */
+    
+    /* 기존 grid-column 속성 무력화 (flex item이 되었으므로) */
+    grid-column: auto; 
+    
+    /* 색상 미세 조정 (선택사항) */
     background-color: #6c757d;
-    padding: 6px;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 /* 계산 버튼 (강조) */
@@ -276,4 +284,22 @@ footer {
     }
 }
 
-/*# sourceMappingURL=main.fefaa07d4cdef5f2e00c.css.map*/
+.system-input-group {
+    /* 그리드의 2번째 칸부터 끝까지 차지 (오른쪽 공간 전체 사용) */
+    grid-column: 2 / -1; 
+    
+    display: flex;
+    align-items: center;
+    gap: 8px; /* 드롭다운과 버튼 사이 간격 */
+}
+
+/* 그룹 내부의 드롭다운 (Select) */
+.system-input-group select {
+    flex-grow: 1; /* 남은 공간을 모두 차지해서 길어짐 */
+    margin: 0;    /* 여백 제거 */
+}
+
+/* 그룹 내부의 데이터 관리 버튼 */
+
+
+/*# sourceMappingURL=main.9ca278f5b773d8f57a29.css.map*/
