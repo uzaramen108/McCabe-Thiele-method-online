@@ -156,12 +156,8 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
 canvas {
   border: 1px solid #eee;
   width: 100%;
-  
-  /* [수정] 다시 정사각형으로 복귀 */
-  aspect-ratio: 1 / 1;
-  
-  /* [수정] 대신 높이 제한을 빡빡하게 둬서 전체 크기를 줄임 */
   max-height: 450px; 
+  aspect-ratio: 1 / 1;
   
   margin: auto;
   background-color: #fff;
@@ -280,4 +276,4 @@ footer {
     }
 }
 
-/*# sourceMappingURL=main.53152a0514098ca2ab29.css.map*/
+/*# sourceMappingURL=main.1be7e802778fe22dfc29.css.map*/
