@@ -36,10 +36,12 @@ body {
 /* --- [핵심] 폼 레이아웃 (2열 배치) --- */
 form {
   display: grid;
-  /* [수정] 라벨 | 인풋 | 라벨 | 인풋 (4컬럼 구조) */
-  grid-template-columns: 130px 1fr 130px 1fr;
+  /* [수정] 라벨 너비를 130px -> 155px로 늘림 
+     (Condensor sub-cooling 글자가 잘리지 않도록)
+  */
+  grid-template-columns: 155px 1fr 155px 1fr;
   column-gap: 15px;
-  row-gap: 8px; /* 위아래 간격 촘촘하게 */
+  row-gap: 10px;
   align-items: center;
 }
 
@@ -77,9 +79,11 @@ h2 {
 label {
   font-weight: 500;
   text-align: right;
-  font-size: 0.9em;
+  font-size: 0.9em; /* 폰트 크기 유지 */
   color: #555;
   white-space: nowrap; /* 줄바꿈 방지 */
+  overflow: hidden;    /* 넘치면 숨김 (하지만 너비를 늘려서 괜찮을 것임) */
+  text-overflow: ellipsis; 
 }
 
 /* 입력 필드 스타일 (Compact) */
@@ -145,22 +149,29 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
 canvas {
   border: 1px solid #eee;
   width: 100%;
-  max-width: 850px; /* 그래프는 좀 더 시원하게 */
-  aspect-ratio: 1/1;
+  max-height: 550px; 
+  aspect-ratio: 1.6 / 1; 
+  
   margin: auto;
   background-color: #fff;
+  display: block;
 }
 
 /* 결과 텍스트 */
 #results-output {
   background: #f8f9fa;
   padding: 12px;
-  margin-top: 15px;
+  /* [수정] 그래프 바로 밑에 딱 붙도록 마진 축소 */
+  margin-top: 10px; 
   border: 1px solid #eee;
   border-radius: 4px;
   font-family: "Courier New", monospace;
   font-size: 13px;
   line-height: 1.5;
+  
+  /* [추가] 결과창이 너무 길어지면 내부 스크롤 생기게 (화면 전체 스크롤 방지) */
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 /* --- 언어 설정 및 후원 버튼 --- */
@@ -254,15 +265,15 @@ footer {
 
 /* --- 반응형 (모바일 대응) --- */
 @media (max-width: 900px) {
-    body {
-        grid-template-columns: 1fr; /* 1단으로 변경 */
+    /* 모바일에서는 그래프 비율을 다시 정사각형에 가깝게 */
+    canvas {
+        max-height: 400px;
+        aspect-ratio: 1 / 1;
     }
+    /* 폼은 1단으로 */
     form {
-        grid-template-columns: 1fr 1fr; /* 모바일에서는 다시 라벨|인풋 1세트로 */
-    }
-    #controls-container, #output-container {
-        width: 100%;
+        grid-template-columns: 1fr 1fr; 
     }
 }
 
-/*# sourceMappingURL=main.4d731e1b054d6432298d.css.map*/
+/*# sourceMappingURL=main.79f36b1c199e2fdb18cd.css.map*/
