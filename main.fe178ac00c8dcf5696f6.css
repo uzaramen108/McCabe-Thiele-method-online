@@ -155,9 +155,8 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
 /* 캔버스 (그래프) */
 canvas {
   border: 1px solid #eee;
-  width: 100%;
-  max-height: 450px; 
-  aspect-ratio: 1 / 1;
+  height: 450px;
+  width: 450px;
   
   margin: auto;
   background-color: #fff;
@@ -276,4 +275,4 @@ footer {
     }
 }
 
-/*# sourceMappingURL=main.1be7e802778fe22dfc29.css.map*/
+/*# sourceMappingURL=main.fe178ac00c8dcf5696f6.css.map*/
