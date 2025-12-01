@@ -2,23 +2,23 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: grid;
-  /* [수정] 왼쪽 패널을 350px -> 540px로 넓혀서 2열 배치를 수용 */
+  /* 왼쪽 패널 540px 유지 */
   grid-template-columns: 540px 1fr;
-  gap: 20px; /* 간격 축소 */
-  padding: 15px; /* 패딩 축소 */
-  max-width: 1600px; /* 최대 너비 늘림 */
+  gap: 15px; /* 간격 더 축소 */
+  padding: 10px; /* 전체 패딩 축소 */
+  max-width: 1400px;
   margin: auto;
   background-color: #f8f9fa;
-  font-size: 14px; /* [수정] 기본 폰트 사이즈 축소 */
+  font-size: 13px; /* [수정] 전체 폰트 크기 줄임 */
 }
 
 /* --- 왼쪽 컨트롤 패널 --- */
 #controls-container {
   background-color: #ffffff;
   border: 1px solid #ddd;
-  padding: 15px; /* 패딩 축소 */
+  padding: 15px;
   border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   height: fit-content;
 }
 
@@ -30,18 +30,16 @@ body {
   border-radius: 6px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 /* --- [핵심] 폼 레이아웃 (2열 배치) --- */
 form {
   display: grid;
-  /* [수정] 라벨 너비를 130px -> 155px로 늘림 
-     (Condensor sub-cooling 글자가 잘리지 않도록)
-  */
-  grid-template-columns: 155px 1fr 155px 1fr;
-  column-gap: 15px;
-  row-gap: 10px;
+  /* 라벨 너비 150px로 고정, 나머지 유동적 */
+  grid-template-columns: 150px 1fr 150px 1fr;
+  column-gap: 10px;
+  row-gap: 8px; /* 위아래 간격 촘촘하게 */
   align-items: center;
 }
 
@@ -50,7 +48,6 @@ form {
 h3, 
 .description, 
 #alpha-container, 
-#calc-form button, 
 #manage-vle-data-btn,
 .languages,
 .donation-container {
@@ -60,10 +57,10 @@ h3,
 /* 섹션 제목 스타일 (Compact) */
 h3 {
   border-bottom: 1px solid #eee;
-  padding-bottom: 5px;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  font-size: 1rem; /* 폰트 줄임 */
+  padding-bottom: 3px;
+  margin-top: 15px;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
   color: #444;
   font-weight: 600;
 }
@@ -79,11 +76,10 @@ h2 {
 label {
   font-weight: 500;
   text-align: right;
-  font-size: 0.9em; /* 폰트 크기 유지 */
   color: #555;
-  white-space: nowrap; /* 줄바꿈 방지 */
-  overflow: hidden;    /* 넘치면 숨김 (하지만 너비를 늘려서 괜찮을 것임) */
-  text-overflow: ellipsis; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* 글자 넘치면 ... 처리 */
 }
 
 /* 입력 필드 스타일 (Compact) */
@@ -92,11 +88,11 @@ input[type="text"],
 select {
   width: 100%;
   box-sizing: border-box;
-  padding: 4px 8px; /* 높이 줄임 */
+  padding: 4px 6px;
   border: 1px solid #ccc;
   border-radius: 3px;
   font-size: 13px;
-  height: 30px; /* 고정 높이 부여 */
+  height: 30px; /* 높이 고정 (버튼과 맞춤) */
 }
 
 input:focus, select:focus {
@@ -121,19 +117,30 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
 
 /* 데이터 관리 버튼 (별도 스타일) */
 #manage-vle-data-btn {
-    margin-top: 10px;
+    margin-top: 8px;
     background-color: #6c757d;
-    padding: 8px;
-    font-size: 13px;
+    padding: 6px;
+    font-size: 12px;
 }
 
 /* 계산 버튼 (강조) */
 #calc-form button[type="submit"] {
-    margin-top: 15px;
+    /* [수정] 전체 너비(1/-1)가 아니라, 오른쪽 절반(3/5)만 차지하게 변경 */
+    /* 이렇게 하면 Sub-cooling 옆자리에 들어감 */
+    grid-column: 3 / 5; 
+    
+    margin-top: 0; /* 위쪽 여백 제거 (입력창과 높이 맞춤) */
+    height: 30px; /* 입력창 높이와 동일하게 맞춤 */
+    padding: 0; /* 패딩 제거 (높이 고정하므로) */
+    font-size: 13px;
     background-color: #4361ee;
-    font-size: 1rem;
-    padding: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 3px;
+    box-shadow: none;
+    
+    /* 텍스트 수직 정렬 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* 설명 박스 */
@@ -149,29 +156,28 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
 canvas {
   border: 1px solid #eee;
   width: 100%;
-  max-height: 550px; 
-  aspect-ratio: 1.6 / 1; 
+  
+  /* [수정] 다시 정사각형으로 복귀 */
+  aspect-ratio: 1 / 1;
+  
+  /* [수정] 대신 높이 제한을 빡빡하게 둬서 전체 크기를 줄임 */
+  max-height: 450px; 
   
   margin: auto;
   background-color: #fff;
-  display: block;
 }
 
 /* 결과 텍스트 */
 #results-output {
   background: #f8f9fa;
-  padding: 12px;
-  /* [수정] 그래프 바로 밑에 딱 붙도록 마진 축소 */
-  margin-top: 10px; 
+  padding: 10px;
+  margin-top: 10px;
   border: 1px solid #eee;
   border-radius: 4px;
   font-family: "Courier New", monospace;
-  font-size: 13px;
-  line-height: 1.5;
-  
-  /* [추가] 결과창이 너무 길어지면 내부 스크롤 생기게 (화면 전체 스크롤 방지) */
-  max-height: 200px;
-  overflow-y: auto;
+  font-size: 12px; /* 폰트 줄임 */
+  line-height: 1.4;
+  white-space: pre-wrap;
 }
 
 /* --- 언어 설정 및 후원 버튼 --- */
@@ -265,15 +271,13 @@ footer {
 
 /* --- 반응형 (모바일 대응) --- */
 @media (max-width: 900px) {
-    /* 모바일에서는 그래프 비율을 다시 정사각형에 가깝게 */
-    canvas {
-        max-height: 400px;
-        aspect-ratio: 1 / 1;
-    }
-    /* 폼은 1단으로 */
-    form {
-        grid-template-columns: 1fr 1fr; 
+    body { grid-template-columns: 1fr; }
+    
+    /* 모바일에서는 다시 버튼을 전체 너비로 */
+    #calc-form button[type="submit"] {
+        grid-column: 1 / -1;
+        margin-top: 10px;
     }
 }
 
-/*# sourceMappingURL=main.79f36b1c199e2fdb18cd.css.map*/
+/*# sourceMappingURL=main.53152a0514098ca2ab29.css.map*/
