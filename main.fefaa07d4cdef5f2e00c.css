@@ -19,7 +19,7 @@ body {
   padding: 15px;
   border-radius: 6px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  height: fit-content;
+  height: auto;
 }
 
 /* --- 오른쪽 출력 패널 --- */
@@ -31,6 +31,7 @@ body {
   display: flex;
   flex-direction: column;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  height: auto; 
 }
 
 /* --- [핵심] 폼 레이아웃 (2열 배치) --- */
@@ -155,8 +156,8 @@ button:disabled { background-color: #ccc; cursor: not-allowed; }
 /* 캔버스 (그래프) */
 canvas {
   border: 1px solid #eee;
-  height: 450px;
-  width: 450px;
+  height: 500px;
+  width: 500px;
   
   margin: auto;
   background-color: #fff;
@@ -275,4 +276,4 @@ footer {
     }
 }
 
-/*# sourceMappingURL=main.fe178ac00c8dcf5696f6.css.map*/
+/*# sourceMappingURL=main.fefaa07d4cdef5f2e00c.css.map*/
