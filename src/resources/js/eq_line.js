@@ -2,6 +2,8 @@
  * @typedef {{x: number, y: number}} VLEPoint
  */
 
+import { Variable } from './ui';
+
 // VLE 데이터는 모듈 내부 변수에 저장되며, 외부에서 주입 가능
 /** @type {VLEPoint[]} */
 let VLE_DATA = [];
@@ -35,32 +37,40 @@ export const METHANOL_VLE_DATA = [
 // 모듈 로드 시 기본 데이터로 초기화
 initializeVLEData(METHANOL_VLE_DATA);
 
-
 /**
  * 외부에서 VLE 데이터를 주입하여 모듈을 초기화합니다.
  * @param {VLEPoint[]} newVLEData - 정렬된 VLE 포인트 배열
  */
 export function initializeVLEData(newVLEData) {
-    if (!Array.isArray(newVLEData) || newVLEData.length < 2) {
-        console.error("VLE Data initialization failed: Data must be an array with at least 2 points.");
-        VLE_DATA = METHANOL_VLE_DATA; // 오류 시 기본값 유지
-        return;
-    }
-    // [핵심] 외부 데이터를 내부 변수에 저장
-    VLE_DATA = newVLEData;
-    console.log(`VLE Data initialized with ${VLE_DATA.length} points.`);
+  if (!Array.isArray(newVLEData) || newVLEData.length < 2) {
+    console.error(
+      'VLE Data initialization failed: Data must be an array with at least 2 points.'
+    );
+    VLE_DATA = METHANOL_VLE_DATA; // 오류 시 기본값 유지
+    return;
+  }
+  // [핵심] 외부 데이터를 내부 변수에 저장
+  VLE_DATA = newVLEData;
+  console.log(`VLE Data initialized with ${VLE_DATA.length} points.`);
 }
-
 
 /**
  * 액상 조성(x_in)에 대한 이상 평형 기상 조성(y)을 계산합니다.
  * 선형 보간(Linear Interpolation)을 사용합니다.
  * @param {number} x_in - 액상 몰분율
  * @returns {number} - 기상 몰분율 (y)
+ * @param {number} alpha
  */
-export function getIdealEquilibriumY(x_in) {
-  if (x_in <= 0) return 0;
-  if (x_in >= 1) return 1;
+export function getIdealEquilibriumY(x_in, alpha) {
+  if (x_in <= 0) {
+    return 0;
+  }
+  if (x_in >= 1) {
+    return 1;
+  }
+  if (alpha) {
+    return (x_in * alpha) / (1 + (alpha - 1) * x_in);
+  }
 
   // [핵심] 내부 변수 VLE_DATA 사용
   let p1 = VLE_DATA[0];

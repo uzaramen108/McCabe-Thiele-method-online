@@ -1,10 +1,6 @@
 # McCabe-Thiele Method Online
 
-
-
 _&check;_ _Korean(한국어)_ | [_English_](README.md)
-
-
 
 **McCabe-Thiele Method Online**은 화학공학을 전공하고 있는 학부생이 만든 웹사이트로, 화학공학 전공 학생과 전문가가 이성분계 증류 공정을 시각화하는 데 도움이 되도록 설계된 웹 기반 시뮬레이션 도구입니다. McCabe-Thiele 다이어그램의 그래픽 구성을 자동화하여 이론적인 단 수, 최소 환류비, 그리고 최적의 공급 위치를 결정합니다. 추후 업데이트를 통하여 다른 화학공정에 대한 도구를 제공할 예정입니다.
 

@@ -7,82 +7,85 @@
  * Seperated operating line into rectifying section and stripping section.
  */
 
-import { getIdealEquilibriumY } from "./eq_line.js";
-import { Variable } from "./ui.js";
+import { getIdealEquilibriumY } from './eq_line.js';
+import { Variable } from './ui.js';
 
 /**
  * VLE 곡선과 y=x 선(45도선)의 교차점 (공비점)을 모두 찾아 반환합니다.
  * @returns {number[]} - 공비점 x-조성 배열. 공비점이 없으면 빈 배열을 반환합니다.
  */
 function findAzeotropeX() {
-    const f = (x) => getIdealEquilibriumY(x) - x;
-    const azeotropes = [];
-    
-    // [설정] 스캔할 간격의 수 (정밀도와 성능의 타협점, 1000개로 설정)
-    const NUM_SEGMENTS = 1000; 
-    const step = 1.0 / NUM_SEGMENTS;
-    const tolerance = 1e-6; // 부동 소수점 오차 허용 범위
+  const f = (x, alpha) => getIdealEquilibriumY(x, alpha) - x;
+  const azeotropes = [];
 
-    let x1 = 0.0;
-    let y1 = f(x1); // f(0) = 0.0 (항상 0임)
+  // [설정] 스캔할 간격의 수 (정밀도와 성능의 타협점, 1000개로 설정)
+  const NUM_SEGMENTS = 1000;
+  const step = 1.0 / NUM_SEGMENTS;
+  const tolerance = 1e-6; // 부동 소수점 오차 허용 범위
 
-    for (let i = 1; i <= NUM_SEGMENTS; i++) {
-        let x2 = Math.min(1.0, i * step); // 1.0을 넘지 않도록 보장
-        let y2 = f(x2);
+  let x1 = 0.0;
+  let y1 = f(x1); // f(0) = 0.0 (항상 0임)
 
-        // 1. [경계값 검사] (x=0 또는 x=1)에서는 공비점이 없다고 가정하고 넘어감
-        if (Math.abs(x1) < tolerance || Math.abs(x2 - 1.0) < tolerance) {
-             x1 = x2;
-             y1 = y2;
-             continue;
-        }
+  for (let i = 1; i <= NUM_SEGMENTS; i++) {
+    let x2 = Math.min(1.0, i * step); // 1.0을 넘지 않도록 보장
+    let y2 = f(x2);
 
-        // 2. [부호 변화 검사] y1과 y2의 부호가 다른지 확인 (45도선 통과)
-        if (y1 * y2 < 0) {
-            // 부호가 바뀌었으므로, 이 구간 [x1, x2] 안에 공비점이 존재
-            
-            // [이분법 재활용] 이 구간에서 정밀한 교차점을 찾음 (30회)
-            let low = x1;
-            let high = x2;
-            for (let j = 0; j < 30; j++) {
-                let mid_x = (low + high) / 2;
-                if (f(mid_x) === 0 || high - low < tolerance) {
-                    low = mid_x; // mid_x로 수렴
-                    break;
-                }
-                if (f(mid_x) * f(low) < 0) {
-                    high = mid_x;
-                } else {
-                    low = mid_x;
-                }
-            }
-            const x_azeo = (low + high) / 2;
-
-            // 중복 방지 및 배열에 추가
-            if (azeotropes.length === 0 || Math.abs(azeotropes[azeotropes.length - 1] - x_azeo) > tolerance) {
-                 azeotropes.push(x_azeo);
-            }
-        }
-        
-        // 3. 다음 루프를 위해 값 갱신
-        x1 = x2;
-        y1 = y2;
+    // 1. [경계값 검사] (x=0 또는 x=1)에서는 공비점이 없다고 가정하고 넘어감
+    if (Math.abs(x1) < tolerance || Math.abs(x2 - 1.0) < tolerance) {
+      x1 = x2;
+      y1 = y2;
+      continue;
     }
 
-    return azeotropes; // 공비점 배열 반환
+    // 2. [부호 변화 검사] y1과 y2의 부호가 다른지 확인 (45도선 통과)
+    if (y1 * y2 < 0) {
+      // 부호가 바뀌었으므로, 이 구간 [x1, x2] 안에 공비점이 존재
+
+      // [이분법 재활용] 이 구간에서 정밀한 교차점을 찾음 (30회)
+      let low = x1;
+      let high = x2;
+      for (let j = 0; j < 30; j++) {
+        let mid_x = (low + high) / 2;
+        if (f(mid_x) === 0 || high - low < tolerance) {
+          low = mid_x; // mid_x로 수렴
+          break;
+        }
+        if (f(mid_x) * f(low) < 0) {
+          high = mid_x;
+        } else {
+          low = mid_x;
+        }
+      }
+      const x_azeo = (low + high) / 2;
+
+      // 중복 방지 및 배열에 추가
+      if (
+        azeotropes.length === 0 ||
+        Math.abs(azeotropes[azeotropes.length - 1] - x_azeo) > tolerance
+      ) {
+        azeotropes.push(x_azeo);
+      }
+    }
+
+    // 3. 다음 루프를 위해 값 갱신
+    x1 = x2;
+    y1 = y2;
+  }
+
+  return azeotropes; // 공비점 배열 반환
 }
 
 /**
  * Return x' when q = 0 (수평선)
  * (q-line 플로팅 및 R_min 계산에 사용됨)
  */
-function ideal_eq2(y_target) {
+function ideal_eq2(y_target, alpha) {
   let low = 0.0;
   let high = 1.0;
   let mid_xa;
   for (let i = 0; i < 30; i++) {
     mid_xa = (low + high) / 2;
-    const y_guess = getIdealEquilibriumY(mid_xa);
+    const y_guess = getIdealEquilibriumY(mid_xa, alpha);
     if (y_guess < y_target) {
       low = mid_xa;
     } else {
@@ -95,16 +98,16 @@ function ideal_eq2(y_target) {
 /**
  * q-line actual equilibrium line의 교차점을 찾기 (q-line 플로팅 및 R_min 계산용).
  */
-function find_q_ideal_eq_intersect(q, zf) {
+function find_q_ideal_eq_intersect(q, zf, alpha) {
   if (Math.abs(q - 1.0) < 1e-6) {
     // q = 1 (수직선)
     const x_intersect = zf;
-    const y_intersect = getIdealEquilibriumY(zf);
+    const y_intersect = getIdealEquilibriumY(zf, alpha);
     return { x: x_intersect, y: y_intersect };
   }
   if (Math.abs(q) < 1e-6) {
     // q = 0 (수평선)
-    const x_intersect = ideal_eq2(zf);
+    const x_intersect = ideal_eq2(zf, alpha);
     const y_intersect = zf;
     return { x: x_intersect, y: y_intersect };
   }
@@ -112,7 +115,7 @@ function find_q_ideal_eq_intersect(q, zf) {
   const q_slope = q / (q - 1);
   const q_intercept = -zf / (q - 1);
   const q_line = (x) => q_slope * x + q_intercept;
-  const f = (x) => getIdealEquilibriumY(x) - q_line(x);
+  const f = (x) => getIdealEquilibriumY(x, alpha) - q_line(x);
 
   let low = 0.0,
     high = 1.0,
@@ -126,7 +129,7 @@ function find_q_ideal_eq_intersect(q, zf) {
     }
   }
   const x_intersect = (low + high) / 2;
-  const y_intersect = getIdealEquilibriumY(x_intersect);
+  const y_intersect = getIdealEquilibriumY(x_intersect, alpha);
 
   return { x: x_intersect, y: y_intersect };
 }
@@ -185,24 +188,28 @@ export function calculateMcCabeThiele(variables) {
     effective_curve: [],
   };
   const results = { R_min: 0, R: 0, stages: 0, feed_stage: 0, xb_actual: 0 };
-  const { x: q_ideal_eq_x, y: q_ideal_eq_y } = find_q_ideal_eq_intersect(q, zf);
+  const { x: q_ideal_eq_x, y: q_ideal_eq_y } = find_q_ideal_eq_intersect(
+    q,
+    zf,
+    variables.alpha
+  );
   const x_azeo_array = findAzeotropeX(); // 공비점 배열을 받음
   let isAzeoError = false;
   const azeoPointsInBoundary = [];
 
   if (x_azeo_array.length > 0) {
-      // 1. 분리 영역(xb ~ xd)을 정의
-      const x_min = Math.min(xd, xb);
-      const x_max = Math.max(xd, xb);
+    // 1. 분리 영역(xb ~ xd)을 정의
+    const x_min = Math.min(xd, xb);
+    const x_max = Math.max(xd, xb);
 
-      // 2. 공비점이 분리 영역 내부에 있는지 확인
-      x_azeo_array.forEach(x_azeo => {
-          if (x_azeo > x_min && x_azeo < x_max) {
-              isAzeoError = true;
-              azeoPointsInBoundary.push(x_azeo);
-          }
-      });
-      /** 
+    // 2. 공비점이 분리 영역 내부에 있는지 확인
+    x_azeo_array.forEach((x_azeo) => {
+      if (x_azeo > x_min && x_azeo < x_max) {
+        isAzeoError = true;
+        azeoPointsInBoundary.push(x_azeo);
+      }
+    });
+    /** 
       const highest_x_azeo = x_azeo_array[x_azeo_array.length - 1];
       if (xd > highest_x_azeo) {
           isAzeoError = true;
@@ -212,17 +219,21 @@ export function calculateMcCabeThiele(variables) {
       }
       */
   }
-  
+
   // [신규] 공비물 오류 발생 시 즉시 반환 (계산 중단)
   if (isAzeoError) {
-      // 오류가 발생했음을 알리는 플래그와 공비점 배열 반환
-      return { 
-          plotData: { /* empty */ }, 
-          results: { /* empty */ }, 
-          floatStageNum: 0,
-          isAzeoError: true,
-          x_azeo_list: azeoPointsInBoundary.map(x => x.toFixed(3)).join(", ")
-      };
+    // 오류가 발생했음을 알리는 플래그와 공비점 배열 반환
+    return {
+      plotData: {
+        /* empty */
+      },
+      results: {
+        /* empty */
+      },
+      floatStageNum: 0,
+      isAzeoError: true,
+      x_azeo_list: azeoPointsInBoundary.map((x) => x.toFixed(3)).join(', '),
+    };
   }
 
   const r_min_slope = (xd - q_ideal_eq_y) / (xd - q_ideal_eq_x);
@@ -279,7 +290,7 @@ export function calculateMcCabeThiele(variables) {
 
   for (let i = 0; i <= 100; i++) {
     const x = i / 100.0;
-    const y_ideal = getIdealEquilibriumY(x); // Ideal equilibrium(blue)
+    const y_ideal = getIdealEquilibriumY(x, variables.alpha); // Ideal equilibrium(blue)
 
     plotData.ideal_eq_curve.push({ x: x, y: y_ideal });
 
@@ -347,5 +358,5 @@ export function calculateMcCabeThiele(variables) {
   results.stages = stage_count;
   results.xb_actual = current_x;
 
-  return { plotData, results, floatStageNum, isAzeoError, x_azeo_array};
+  return { plotData, results, floatStageNum, isAzeoError, x_azeo_array };
 }

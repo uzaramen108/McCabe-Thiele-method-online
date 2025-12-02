@@ -10,8 +10,7 @@ module.exports = {
     ko: './src/ko/ko.js',
     main_update_history:
       './src/resources/js/update_history/main_update_history.js',
-    dark_color_scheme:
-      './src/resources/js/utils/dark_color_scheme.js',
+    dark_color_scheme: './src/resources/js/utils/dark_color_scheme.js',
   },
   output: {
     filename: '[name].[contenthash].js',
@@ -64,12 +63,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/ko/index.html',
       filename: 'ko/index.html',
-      chunks: [
-        'runtime',
-        'ko',
-        'main',
-        'dark_color_scheme',
-      ],
+      chunks: ['runtime', 'ko', 'main', 'dark_color_scheme'],
       chunksSortMode: 'manual',
       minify: {
         collapseWhitespace: true,
