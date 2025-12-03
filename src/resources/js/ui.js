@@ -520,7 +520,9 @@ async function handleDeleteSystem() {
       `이 작업은 되돌릴 수 없으며, 서버에서 영구적으로 삭제됩니다.`
   );
 
-  if (!isConfirmed) return;
+  if (!isConfirmed) {
+    return;
+  }
 
   // 버튼 중복 클릭 방지 (로딩 중 표시)
   const originalBtnText = deleteBtn.textContent;
