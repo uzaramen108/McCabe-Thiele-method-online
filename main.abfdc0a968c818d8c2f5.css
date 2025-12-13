@@ -512,5 +512,75 @@ footer a:hover {
   color: #999;
 }
 
+/* 모달 크기 확장 */
+.modal-lg {
+  max-width: 900px; /* 넓게 쓰기 위해 */
+  width: 95%;
+}
 
-/*# sourceMappingURL=main.ca85e463a8d93f57f41d.css.map*/
+/* 3단 분할 레이아웃 */
+.modal-split-container {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.split-panel {
+  flex: 1; /* 1:1:1 비율 */
+  display: flex;
+  flex-direction: column;
+}
+
+/* 가운데 패널 구분선 */
+.center-panel {
+  border-left: 1px solid #e0e0e0;
+  border-right: 1px solid #e0e0e0;
+  padding: 0 20px;
+}
+
+/* 버튼 및 인풋 스타일 보정 */
+.full-width {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-success:hover { background-color: #218838; }
+
+.props-container {
+  display: flex;
+  gap: 15px;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+}
+.prop-group {
+  flex: 1;
+}
+.prop-group input {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+/* 모바일 대응 (화면 작으면 세로로) */
+@media (max-width: 768px) {
+  .modal-split-container {
+    flex-direction: column;
+  }
+  .center-panel {
+    border: none;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 20px 0;
+    margin: 20px 0;
+  }
+}
+
+/*# sourceMappingURL=main.abfdc0a968c818d8c2f5.css.map*/
